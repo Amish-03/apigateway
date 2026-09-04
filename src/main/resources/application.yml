@@ -1,0 +1,51 @@
+server:
+  port: 6005
+
+spring:
+  application:
+    name: apigatewayexculsive
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          add-to-simple-url-handler-mapping: true
+
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - PATCH
+                  - OPTIONS
+                allowedHeaders:
+                  - "*"
+                allowCredentials: true
+
+          routes:
+            - id: login-client
+              uri: lb://loginservice
+              predicates:
+                - Path=/api/auth/**
+
+            - id: issues-client
+              uri: lb://issueservice
+              predicates:
+                - Path=/issues,/issues/**
+
+            - id: projects-client
+              uri: lb://ProjectsMicroService
+              predicates:
+                - Path=/projects,/projects/**
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8666/eureka/
