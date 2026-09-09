@@ -11,22 +11,6 @@ spring:
         webmvc:
           add-to-simple-url-handler-mapping: true
 
-          globalcors:
-            cors-configurations:
-              '[/**]':
-                allowedOrigins:
-                  - "http://localhost:5173"
-                allowedMethods:
-                  - GET
-                  - POST
-                  - PUT
-                  - DELETE
-                  - PATCH
-                  - OPTIONS
-                allowedHeaders:
-                  - "*"
-                allowCredentials: true
-
           routes:
             - id: login-client
               uri: lb://loginservice
@@ -42,6 +26,11 @@ spring:
               uri: lb://ProjectsMicroService
               predicates:
                 - Path=/projects,/projects/**
+
+            - id: notifications-client
+              uri: lb://notificationservice
+              predicates:
+                - Path=/api/notifications,/api/notifications/**,/ws-notifications,/ws-notifications/**
 
 eureka:
   client:
