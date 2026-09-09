@@ -38,3 +38,8 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8666/eureka/
+
+# JWT Configuration - must match LoginMicroService secret
+jwt:
+  secret: aVeryLongAndSecure256BitSecretKeyForJWTSigningPurposes123456
+  expiration-ms: 1800000
