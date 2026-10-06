@@ -5,18 +5,31 @@ pipeline {
 
         stage('Maven Compile') {
             steps {
-                bat 'mvnw.cmd clean compile'
+                bat 'mvnw.cmd -B clean compile'
             }
         }
 
         stage('Maven Test') {
             steps {
-                bat 'mvnw.cmd test'
+                bat 'mvnw.cmd -B test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Maven Package') {
+            steps {
+                // Reuses classes from Compile and tests from Test; nothing is rebuilt.
+                bat 'mvnw.cmd -B package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
+                // Dockerfile is runtime-only and copies target/*.jar produced above.
                 bat 'docker build -t apigateway-service:latest .'
             }
         }
