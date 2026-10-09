@@ -8,7 +8,9 @@ spring:
   cloud:
     gateway:
       server:
-        webmvc:
+        webflux:
+          # Required for WebSocket routing: it registers the gateway's handler
+          # mapping so ws:// upgrades are matched against the routes above.
           add-to-simple-url-handler-mapping: true
 
           routes:
@@ -31,15 +33,21 @@ spring:
               uri: lb://notificationservice
               predicates:
                 - Path=/api/notifications,/api/notifications/**,/ws-notifications,/ws-notifications/**
+              # The gateway's CorsFilter is the single CORS authority. Left intact,
+              # the SockJS endpoint downstream adds its own Access-Control-* headers
+              # and the browser rejects the response for "multiple values". Dropping
+              # Origin on the forwarded hop stops it doing CORS processing at all.
+              filters:
+                - RemoveRequestHeader=Origin
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8666/eureka/
+      defaultZone: ${EUREKA_SERVICE_URL:http://localhost:8666/eureka/}
 
 # JWT Configuration - must match LoginMicroService secret
 jwt:
-  secret: aVeryLongAndSecure256BitSecretKeyForJWTSigningPurposes123456
-  expiration-ms: 1800000
+  secret: ${JWT_SECRET:aVeryLongAndSecure256BitSecretKeyForJWTSigningPurposes123456}
+  expiration-ms: ${JWT_EXPIRATION_MS:1800000}
