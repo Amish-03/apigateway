@@ -1,4 +1,4 @@
-pipeline {
+﻿pipeline {
     agent any
 
     stages {
@@ -38,7 +38,7 @@ pipeline {
     post {
         success {
             mail(
-                to: 'chrismervin715@gmail.com',
+                to: 'amishkulkarni03@gmail.com, chrismervin715@gmail.com, navaneethshetty2304@gmail.com, shreeshaofficial287@gmail.com',
                 subject: "SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
 Build Successful
@@ -53,7 +53,7 @@ Build URL: ${BUILD_URL}
 
         failure {
             mail(
-                to: 'chrismervin715@gmail.com',
+                to: 'amishkulkarni03@gmail.com, chrismervin715@gmail.com, navaneethshetty2304@gmail.com, shreeshaofficial287@gmail.com',
                 subject: "FAILED: ${JOB_NAME} #${BUILD_NUMBER}",
                 body: """
 Build Failed
