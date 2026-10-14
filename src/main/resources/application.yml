@@ -1,5 +1,6 @@
 server:
   port: 6005
+  address: 0.0.0.0
 
 spring:
   application:
@@ -50,4 +51,8 @@ eureka:
 # JWT Configuration - must match LoginMicroService secret
 jwt:
   secret: ${JWT_SECRET:aVeryLongAndSecure256BitSecretKeyForJWTSigningPurposes123456}
+<<<<<<< Updated upstream
   expiration-ms: ${JWT_EXPIRATION_MS:1800000}
+=======
+  expiration-ms: ${JWT_EXPIRATION_MS:1800000}
+>>>>>>> Stashed changes
