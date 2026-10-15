@@ -1,7 +1,3 @@
-# target/ is NOT ignored: the build output jar is the only thing we copy.
-
-# Everything else under target/ is excluded explicitly.
-
 target/classes/
 target/test-classes/
 target/generated-sources/
@@ -9,17 +5,11 @@ target/generated-test-sources/
 target/maven-status/
 target/maven-archiver/
 target/surefire-reports/
-target/\*.jar.original
+target/*.jar.original
 
-src/
-pom.xml
 .git/
 .idea/
-.mvn/
-\*.iml
-mvnw
-mvnw.cmd
+*.iml
 HELP.md
 README.md
 Jenkinsfile
-Dockerfile
