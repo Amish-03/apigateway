@@ -1,7 +1,12 @@
-# Runtime-only image. The jar is built by the CI pipeline (mvnw package)
-# before `docker build` runs, so Maven is never invoked here.
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn -B dependency:go-offline
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY target/*.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 6005
 ENTRYPOINT ["java", "-jar", "app.jar"]

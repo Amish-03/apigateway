@@ -28,9 +28,10 @@ import java.nio.charset.StandardCharsets;
  *
  * Exempt paths/methods (no token required):
  *   - HTTP OPTIONS preflight requests
- *   - /api/auth/** - login and register endpoints
+ *   - /api/auth/** - login, register, and password reset endpoints
  *   - /actuator/health - liveness probe used by the container healthcheck
  *   - /ws-notifications/** - SockJS handshake; see below
+ *   - /api/notifications/email/send - email notifications endpoint
  *
  * All other gateway routes require a valid, non-expired JWT.
  */
@@ -58,10 +59,14 @@ public class JwtAuthFilter implements WebFilter {
             return true;
         }
 
+        if (path.startsWith("/api/notifications/email/send")) {
+            return true;
+        }
+
         // A browser cannot attach an Authorization header to a SockJS/WebSocket
         // handshake, so this hop is unauthenticated here and the token is instead
         // validated by the notification service from the STOMP CONNECT frame.
-        return path.equals("/ws-notifications") || path.startsWith("/ws-notifications/");
+        return path.equals("/ws-notifications") || path.startsWith("/ws-notifications/") || path.startsWith("/api/notifications/email/send");
     }
 
     @Override
